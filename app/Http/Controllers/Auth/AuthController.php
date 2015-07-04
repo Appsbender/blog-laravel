@@ -45,8 +45,8 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'username' => 'required|min:3|max:50|unique:users',
+            'email' => 'required|email|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);
     }
@@ -63,6 +63,7 @@ class AuthController extends Controller
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'access' => User::USER
         ]);
     }
 
@@ -74,25 +75,25 @@ class AuthController extends Controller
     public function authenticate($email, $password)
     {
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
-            return redirect()->intended();
+            \Session::flash('success', 'Success!');
+            return redirect()->intended('home');
         }
     }
 
-    public function postLogin(Request $request){
-        $this->validate($request, [
-            'email' => 'required',
-            'password' => 'required'
-        ]);
-
-        if (!$this->authenticate($request->email, $request->password)) {
-            echo 1;
-        }
-    }
-
-    public function postRegister(RegistrationFormRequest $request){
-        $this->create($request->all());
-        $this->authenticate($request->email, $request->password);
-        $request->session()->flash('success', 'Registration done!');
-        return redirect()->intended();
-    }
+//    public function postLogin(Request $request){
+//        $this->validate($request, [
+//            'email' => 'required',
+//            'password' => 'required'
+//        ]);
+//
+//        if (!$this->authenticate($request->email, $request->password)) {
+//            echo 1;
+//        }
+//    }
+//
+//    public function postRegister(RegistrationFormRequest $request){
+//        $this->create($request->all());
+//        $this->authenticate($request->email, $request->password);
+//        return redirect()->intended('home');
+//    }
 }

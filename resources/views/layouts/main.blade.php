@@ -11,12 +11,13 @@
     <meta http-equiv="expires" content=""/>
     <meta name="robots" content="index,follow"/>
     <meta name="revisit-after" content="4 days"/>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/clean-blog.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic'>
-    <link rel="stylesheet" type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'>
+    @section('stylesheets')
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/clean-blog.css"/>
+        <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css"/>
+        <link rel="stylesheet" type="text/css" href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic'>
+        <link rel="stylesheet" type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'>
+    @show
     <title>{{ $appName }}</title>
 </head>
 <body>
@@ -34,6 +35,11 @@
                 <li><a href="/categories">Categories</a></li>
                 <li><a href="/subscribe">Follow</a></li>
                 <li><a href="/contacts">Contact</a></li>
+                @if (Auth::user())
+                    <li><a href="/auth/logout">Logout</a></li>
+                @else
+                    <li><a href="/auth/login">Login</a></li>
+                @endif
             </ul>
         </div>
     </div>
@@ -63,10 +69,15 @@
 <!-- Main Content -->
 <div class="container">
     <div class="row">
-        @if ($request->session()->get('success'))
+        @if (Session::has('success'))
             <div class="alert alert-success alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                {{ session('success') }}
+                {{ Session::get('success') }}
+            </div>
+        @elseif(Session::has('error'))
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {{ Session::get('error') }}
             </div>
         @endif
 
@@ -119,8 +130,10 @@
     </div>
 </footer>
 </body>
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="/js/clean-blog.js"></script>
+@section('scripts')
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="/js/clean-blog.js"></script>
+@show
 </html>

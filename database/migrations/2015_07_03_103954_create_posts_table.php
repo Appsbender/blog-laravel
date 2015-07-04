@@ -23,6 +23,7 @@ class CreatePostsTable extends Migration
             $table->integer('hits');
             $table->integer('likes');
             $table->tinyInteger('status');
+            $table->timestamp('published_at');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

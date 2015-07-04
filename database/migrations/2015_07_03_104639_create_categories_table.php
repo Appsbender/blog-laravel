@@ -19,11 +19,11 @@ class CreateCategoriesTable extends Migration
         });
 
         Schema::create('categories_posts', function (Blueprint $table) {
-            $table->integer('category_id')->unsigned()->index();
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->integer('categories_id')->unsigned()->index();
+            $table->foreign('categories_id')->references('id')->on('categories')->onDelete('cascade');
 
-            $table->integer('post_id')->unsigned()->index();
-            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
+            $table->integer('posts_id')->unsigned()->index();
+            $table->foreign('posts_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 
