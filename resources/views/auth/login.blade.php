@@ -1,21 +1,36 @@
-<form method="POST" action="/auth/login">
-    {!! csrf_field() !!}
+@extends('layouts.main')
 
-    <div>
-        Email
-        <input type="email" name="email" value="{{ old('email') }}">
+@section('content')
+    @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    {!! Form::open() !!}
+
+    <div class="form-group">
+        {!! Form::label('email') !!}
+        {!! Form::text('email', null, ['class' => 'form-control', 'placeholder' => 'Email']) !!}
     </div>
 
-    <div>
-        Password
-        <input type="password" name="password" id="password">
+    <div class="form-group">
+        {!! Form::label('password') !!}
+        {!! Form::password('password', ['class' => 'form-control', 'placeholder' => 'Password']) !!}
     </div>
 
-    <div>
-        <input type="checkbox" name="remember"> Remember Me
+    <div class="form-group">
+        <label>
+            {!! Form::checkbox('remember') !!} Remember me
+        </label>
+
     </div>
 
-    <div>
-        <button type="submit">Login</button>
-    </div>
-</form>
+    {!! Form::submit('Login', ['class' => 'btn btn-default']) !!}
+
+    {!! Form::close() !!}
+@endsection

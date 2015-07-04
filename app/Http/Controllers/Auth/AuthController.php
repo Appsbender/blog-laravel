@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\RegistrationFormRequest;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -58,7 +60,7 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
@@ -72,29 +74,25 @@ class AuthController extends Controller
     public function authenticate($email, $password)
     {
         if (Auth::attempt(['email' => $email, 'password' => $password])) {
-            // Authentication passed...
-            return redirect()->intended('dashboard');
+            return redirect()->intended();
         }
     }
 
     public function postLogin(Request $request){
-        echo 2;
-        $email = $request->email;
-        $password = $request->password;
-        if (Auth::attempt(['email' => $email, 'password' => $password])) {
-            // Authentication passed...
-            echo 3;
-            return redirect()->intended('dashboard');
-        }
-        else
+        $this->validate($request, [
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
+        if (!$this->authenticate($request->email, $request->password)) {
             echo 1;
+        }
     }
 
-    public function postRegister(Request $request){
-        $user = new User();
-        $user->username = $request->username;
-        $user->password = $request->password;
-        $user->email = $request->email;
-        $user->save();
+    public function postRegister(RegistrationFormRequest $request){
+        $this->create($request->all());
+        $this->authenticate($request->email, $request->password);
+        $request->session()->flash('success', 'Registration done!');
+        return redirect()->intended();
     }
 }

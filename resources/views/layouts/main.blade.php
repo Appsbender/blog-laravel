@@ -63,6 +63,13 @@
 <!-- Main Content -->
 <div class="container">
     <div class="row">
+        @if ($request->session()->get('success'))
+            <div class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {{ session('success') }}
+            </div>
+        @endif
+
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
             @yield('content')
         </div>
@@ -97,7 +104,7 @@
                         </a>
                     </li>
                 </ul>
-                <p class="copyright text-muted">&copy; Title, 2015</p>
+                <p class="copyright text-muted">&copy; {{ $appName }}, 2015</p>
 
                 <p class="copyright text-muted hidden"><a href="http://statok.net/go/8707"><img
                                 src="http://statok.net/image/8707" alt="Statok.net"/></a></p>
