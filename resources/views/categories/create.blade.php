@@ -3,7 +3,7 @@
 @section('content')
     @include('errors.list')
 
-    {!! Form::open() !!}
+    {!! Form::open(['url' => 'categories']) !!}
 
     <div class="form-group">
         {!! Form::label('name') !!}

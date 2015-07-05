@@ -3,7 +3,7 @@
 @section('content')
     @include('errors.list')
 
-    {!! Form::model($category) !!}
+    {!! Form::model($category, ['url' => ['/categories', $category->id], 'method' => 'PATCH']) !!}
 
     <div class="form-group">
         {!! Form::label('name') !!}

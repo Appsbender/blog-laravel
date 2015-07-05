@@ -36,4 +36,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     const USER = 1;
     const ADMIN = 10;
 
+    public function posts()
+    {
+        return $this->belongsToMany('App\Posts');
+    }
 }

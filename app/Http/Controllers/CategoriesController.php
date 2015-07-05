@@ -26,7 +26,7 @@ class CategoriesController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -39,7 +39,7 @@ class CategoriesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @return Response
+     * @return \Illuminate\View\View
      */
     public function store(Request $request)
     {
@@ -61,7 +61,7 @@ class CategoriesController extends Controller
     {
         $category = Categories::findOrFail($id);
         $posts = $category->posts()->simplePaginate(5);
-        return view('main.index', compact('posts'));
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -100,8 +100,8 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return Response
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy($id)
     {

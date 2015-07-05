@@ -21,8 +21,8 @@
     </div>
 
     <div class="form-group">
-        {!! Form::label('tags') !!}
-        {!! Form::select('tagsList[]', $tags, null, ['class' => 'form-control', 'placeholder' => 'Tags', 'multiple']) !!}
+        {!! Form::label('tag_list') !!}
+        {!! Form::select('tag_list[]', $tags, null, ['class' => 'form-control', 'placeholder' => 'Tags', 'multiple']) !!}
     </div>
 
     <div class="form-group">

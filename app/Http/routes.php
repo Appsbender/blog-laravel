@@ -19,13 +19,14 @@ Route::get('posts/create', 'PostsController@create');
 Route::post('posts/create', 'PostsController@store');
 
 // Categories routes
-Route::get('categories', 'CategoriesController@index');
-Route::get('categories/create', 'CategoriesController@create');
-Route::post('categories/create', 'CategoriesController@store');
-Route::get('categories/edit/{id}', 'CategoriesController@edit');
-Route::post('categories/edit/{id}', 'CategoriesController@update');
-Route::get('categories/destroy/{id}', 'CategoriesController@destroy');
-Route::get('categories/{name}', 'CategoriesController@show');
+Route::resource('categories', 'CategoriesController');
+//Route::get('categories', 'CategoriesController@index');
+//Route::get('categories/create', 'CategoriesController@create');
+//Route::post('categories/create', 'CategoriesController@store');
+//Route::get('categories/edit/{id}', 'CategoriesController@edit');
+//Route::post('categories/edit/{id}', 'CategoriesController@update');
+//Route::get('categories/destroy/{id}', 'CategoriesController@destroy');
+//Route::get('categories/{name}', 'CategoriesController@show');
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
