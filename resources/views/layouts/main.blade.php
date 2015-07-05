@@ -48,11 +48,11 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                @if (isset($pageInfo))
+                @if (isset($post))
                     <div class="post-heading">
                         <h1>{{ $pageTitle or $appName }}</h1>
                         <h2 class="subheading">{{ $pageDescription }}</h2>
-                        <span class="meta">{{ $pageInfo }}</span>
+                        <span class="meta">by {!! $post->user->username !!}, {!! $post->created_at->format('d M Y') !!}</span>
                     </div>
                 @else
                     <div class="site-heading">

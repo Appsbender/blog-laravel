@@ -9,7 +9,7 @@ class Posts extends Model
     protected $table = 'posts';
 
     protected $fillable = [
-        'id_user',
+        'user_id',
         'title',
         'alias',
         'description',
@@ -20,15 +20,33 @@ class Posts extends Model
         'likes',
         'status',
         'published_at',
-        'tagsList',
-        'categoriesList'
     ];
 
-    public $tagsList;
-    public $categoriesList;
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
 
     public function categories()
     {
-        return $this->belongsToMany('App/Categories');
+        return $this->belongsToMany('App\Categories');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tags');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Comments');
+    }
+
+    public function getCategoriesListAttribute() {
+        return $this->categories()->lists('id')->all();
+    }
+
+    public function getTagsListAttribute() {
+        return $this->tags()->lists('id')->all();
     }
 }

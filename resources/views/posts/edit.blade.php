@@ -8,7 +8,7 @@
 @section('content')
     @include('errors.list')
 
-    {!! Form::open(['url' => '/posts']) !!}
+    {!! Form::model($post, ['url' => ['/posts', $post->id], 'method' => 'PATCH']) !!}
 
     <div class="form-group">
         {!! Form::label('title') !!}
@@ -17,12 +17,12 @@
 
     <div class="form-group">
         {!! Form::label('categories_list') !!}
-        {!! Form::select('categories_list[]', $categories, null, ['class' => 'form-control', 'placeholder' => 'Categories', 'multiple']) !!}
+        {!! Form::select('categories_list[]', $categories, $post->categories_list, ['class' => 'form-control', 'placeholder' => 'Categories', 'multiple']) !!}
     </div>
 
     <div class="form-group">
         {!! Form::label('tags_list') !!}
-        {!! Form::select('tags_list[]', $tags, null, ['class' => 'form-control', 'placeholder' => 'Tags', 'multiple']) !!}
+        {!! Form::select('tags_list[]', $tags, $post->tags_list, ['class' => 'form-control', 'placeholder' => 'Tags', 'multiple']) !!}
     </div>
 
     <div class="form-group">
@@ -40,7 +40,7 @@
         {!! Form::textarea('description', null, ['class' => 'form-control', 'placeholder' => 'Description']) !!}
     </div>
 
-    {!! Form::submit('Create', ['class' => 'btn btn-default']) !!}
+    {!! Form::submit('Edit', ['class' => 'btn btn-default']) !!}
 
     {!! Form::close() !!}
 @endsection

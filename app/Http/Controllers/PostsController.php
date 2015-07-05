@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Posts;
 use App\Categories;
 use App\Tags;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -21,7 +22,7 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Posts::simplePaginate(5);
+        $posts = Posts::latest()->simplePaginate(5);
         return view('posts.index', compact('posts'));
     }
 
@@ -35,17 +36,9 @@ class PostsController extends Controller
         $pageTitle = 'Posts';
         $pageDescription = 'Create new post';
 
-        $allCategories = Categories::all();
-        $categories = [];
-        foreach ($allCategories as $category) {
-            $categories[$category->id] = $category->name;
-        }
+        $categories = Categories::lists('name', 'id');
+        $tags = Tags::lists('name', 'id');
 
-        $allTags = Tags::all();
-        $tags = [];
-        foreach ($allTags as $tag) {
-            $tags[$tag->id] = $tag->name;
-        }
         return view('posts.create', compact('pageTitle', 'pageDescription', 'categories', 'tags'));
     }
 
@@ -58,7 +51,38 @@ class PostsController extends Controller
     {
         $input = $request->all();
         $input['alias'] = HelperFunctions::str2url($request->title);
-        dd($input);
+        $input['user_id'] = \Auth::user()->id;
+        $post = Posts::create($input);
+        $categories_ids = [];
+        foreach ($input['categories_list'] as $value) {
+            $category = Categories::findOrNew($value);
+            if ($category->exists) {
+                array_push($categories_ids, $value);
+            }
+            else {
+                $category->name = $value;
+                $category->save();
+                array_push($categories_ids, $category->id);
+            }
+        }
+        $post->categories()->attach($categories_ids);
+
+        $tags_ids = [];
+        foreach ($input['tags_list'] as $value) {
+            $tag = Tags::findOrNew($value);
+            if ($tag->exists) {
+                array_push($tags_ids, $value);
+            }
+            else {
+                $tag->name = $value;
+                $tag->save();
+                array_push($tags_ids, $tag->id);
+            }
+        }
+        $post->tags()->attach($tags_ids);
+
+        \Session::flash('success', 'Post created');
+        return redirect('/');
     }
 
     /**
@@ -69,7 +93,11 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = Posts::findOrFail($id);
+        $pageTitle = $post->title;
+        $pageDescription = $post->short_description;
+
+        return view('posts.show', compact('post', 'pageTitle', 'pageDescription'));
     }
 
     /**
@@ -80,7 +108,14 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Posts::findOrFail($id);
+        $pageTitle = 'Posts';
+        $pageDescription = 'Edit existing post';
+
+        $categories = Categories::lists('name', 'id');
+        $tags = Tags::lists('name', 'id');
+
+        return view('posts.edit', compact('pageTitle', 'pageDescription', 'post', 'categories', 'tags'));
     }
 
     /**
@@ -89,9 +124,42 @@ class PostsController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update($id)
+    public function update($id, Requests\PostsFormRequest $request)
     {
-        //
+        $post = Posts::findOrFail($id);
+        $input = $request->all();
+        $input['alias'] = HelperFunctions::str2url($request->title);
+        $post->update($input);
+        $categories_ids = [];
+        foreach ($input['categories_list'] as $value) {
+            $category = Categories::findOrNew($value);
+            if ($category->exists) {
+                array_push($categories_ids, $value);
+            }
+            else {
+                $category->name = $value;
+                $category->save();
+                array_push($categories_ids, $category->id);
+            }
+        }
+        $post->categories()->sync($categories_ids);
+
+        $tags_ids = [];
+        foreach ($input['tags_list'] as $value) {
+            $tag = Tags::findOrNew($value);
+            if ($tag->exists) {
+                array_push($tags_ids, $value);
+            }
+            else {
+                $tag->name = $value;
+                $tag->save();
+                array_push($tags_ids, $tag->id);
+            }
+        }
+        $post->tags()->sync($tags_ids);
+
+        \Session::flash('success', 'Post updated');
+        return redirect('/');
     }
 
     /**

@@ -15,8 +15,9 @@ Route::get('home', 'PostsController@index');
 Route::get('/', 'PostsController@index');
 
 // Posts routes
-Route::get('posts/create', 'PostsController@create');
-Route::post('posts/create', 'PostsController@store');
+Route::resource('posts', 'PostsController');
+//Route::get('posts/create', 'PostsController@create');
+//Route::post('posts/create', 'PostsController@store');
 
 // Categories routes
 Route::resource('categories', 'CategoriesController');

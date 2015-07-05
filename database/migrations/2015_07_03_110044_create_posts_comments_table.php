@@ -12,9 +12,9 @@ class CreatePostsCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('posts_comments', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('post_id')->unsigned();
+            $table->integer('posts_id')->unsigned();
             $table->string('comment', 1000);
             $table->string('username', 50);
             $table->string('email', 50);
@@ -25,7 +25,7 @@ class CreatePostsCommentsTable extends Migration
             $table->tinyInteger('status');
             $table->timestamps();
 
-            $table->foreign('post_id')->references('id')->on('posts');
+            $table->foreign('posts_id')->references('id')->on('posts');
         });
     }
 
@@ -36,6 +36,6 @@ class CreatePostsCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('posts_comments');
+        Schema::drop('comments');
     }
 }

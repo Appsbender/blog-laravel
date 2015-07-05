@@ -28,8 +28,8 @@ class PostsFormRequest extends Request
             'description' => 'required',
             'short_description' => 'required',
             'seo_description' => 'required',
-            'categoriesList' => 'required',
-            'tagsList' => 'required'
+            'categories_list' => 'required',
+            'tags_list' => 'required'
         ];
     }
 }
